@@ -34,7 +34,7 @@ const product = [];
 // console.log(product);
 app.get("/search", (req, res) => {
   const input = req.query.query;
-  const url = `https://www.flipkart.com/search?q=${input}`;
+  const url = `https://www.amazon.com/search?q=${input}`;
   axios
     .get(url)
     .then((response) => {
@@ -77,7 +77,7 @@ app.get("/search", (req, res) => {
               ? halflink3
               : halflink4;
 
-            const link = "https://www.flipkart.com" + productLink;
+            const link = "https://www.amazon.com" + productLink;
             // const link = "https://www.flipkart.com" + halflink;
 
             return { title, price, image, rating, link };
