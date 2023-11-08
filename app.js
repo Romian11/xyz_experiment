@@ -29,19 +29,16 @@ const headers = {
 };
 
 
-
-const product = [];
-// console.log(product);
-app.get("/search", (req, res) => {
-  const input = req.query.query;
-  const url = `https://www.amazon.com/search?q=${input}`;
+app.get("/", (req, res) => {
+  const url = `https://www.amazon.in`;
   axios
     .get(url)
     .then((response) => {
       if (response.status === 200) {
         const $ = cheerio.load(response.data);
 
-        const products = $("div[data-id]")
+        const products = [];
+        $("div[data-id]")
           .map((index, element) => {
             const title1 = $(element).find('div[class*="_4rR01T"]').text();
             const title2 = $(element).find(".IRpwTa").text();
@@ -56,7 +53,6 @@ app.get("/search", (req, res) => {
               ? title2
               : title3;
             const title = productTitle;
-
             const price = $(element).find('div[class*="_30jeq3"]').text();
             const image = $(element).find("img[src]").attr("src");
             const rating = $(element).find('div[class*="_3LWZlK"]').text();
@@ -76,14 +72,11 @@ app.get("/search", (req, res) => {
               : isValidLink3
               ? halflink3
               : halflink4;
+            const link = "https://www.amazon.in/" + productLink;
 
-            const link = "https://www.amazon.com" + productLink;
-            // const link = "https://www.flipkart.com" + halflink;
-
-            return { title, price, image, rating, link };
+            products.push({ title, price, image, rating, link });
           })
           .get();
-
         res.render("index.hbs", { products });
       } else {
         res.status(response.status).send("Request failed");
