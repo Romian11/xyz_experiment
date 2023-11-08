@@ -88,3 +88,8 @@ app.get("/", (req, res) => {
       res.status(500).send(error);
     });
 });
+
+app.listen(port, () => {
+  console.log("listening on port " + port);
+});
+
