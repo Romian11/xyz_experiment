@@ -29,16 +29,19 @@ const headers = {
 };
 
 
-app.get("/", (req, res) => {
-  const url = `https://www.flipkart.com/search`;
+
+const product = [];
+// console.log(product);
+app.get("/search", (req, res) => {
+  const input = req.query.query;
+  const url = `https://www.flipkart.com/search?q=${input}`;
   axios
-    .get(url, {header:headers})
+    .get(url)
     .then((response) => {
       if (response.status === 200) {
         const $ = cheerio.load(response.data);
 
-        const products = [];
-        $("div[data-id]")
+        const products = $("div[data-id]")
           .map((index, element) => {
             const title1 = $(element).find('div[class*="_4rR01T"]').text();
             const title2 = $(element).find(".IRpwTa").text();
@@ -73,9 +76,11 @@ app.get("/", (req, res) => {
               : isValidLink3
               ? halflink3
               : halflink4;
-            const link = "https://www.flipkart.com" + productLink;
 
-            products.push({ title, price, image, rating, link });
+            const link = "https://www.flipkart.com" + productLink;
+            // const link = "https://www.flipkart.com" + halflink;
+
+            return { title, price, image, rating, link };
           })
           .get();
 
@@ -86,9 +91,9 @@ app.get("/", (req, res) => {
     })
     .catch((error) => {
       res.status(500).send(error);
+   
     });
 });
-
 app.listen(port, () => {
   console.log("listening on port " + port);
 });
