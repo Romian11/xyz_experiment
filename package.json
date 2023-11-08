@@ -46,7 +46,7 @@
     "yargs-parser": "^20.2.9"
   },
   "engines": {
-    "node": ">=19 <20"
+    "node": ">=20 <=21"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
